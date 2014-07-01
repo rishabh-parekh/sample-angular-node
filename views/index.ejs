@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" ng-app="Twitter">
+<head>
+  <meta charset="utf-8">
+  <title><%= title %></title>
+
+
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.18/angular.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.18/angular-resource.min.js"></script>
+	
+	<script src="/javascripts/TweetList.js"></script>
+
+</head>
+<body>
+
+	<div ng-controller="TweetList" class="container">
+
+		<div class="user-search row">
+			<div class="input-group col-lg-3">
+			  <span class="input-group-addon">@</span>
+			  <input type="text" class="form-control" placeholder="TwitterDev" ng-model="username">
+	      <span class="input-group-btn">
+	        <button class="btn btn-default" type="button" ng-click="getTweets()">Get Tweets</button>
+	      </span>
+			</div>
+			<div class="input-group col-lg-9">
+			</div>
+		</div>
+		
+
+		<div class="row">
+	    <div class="list-group">
+	    	<div ng-repeat="tweet in twitterResult" class="list-group-item">
+		    	
+		    	<div class="media">
+			    	<a class="profile-image pull-left" href="{{tweet.user.url}}" target="_blank">
+		    			<img src="{{tweet.user.profile_image_url}}" />
+			  		</a>
+			  		<div class="media-body">
+			  			<span class="tweeter-name">{{tweet.user.name}}</span> <span class="tweeter-screenname">@{{tweet.user.screen_name}}</span><br/>
+		    			{{tweet.text}}
+					  </div>
+		    	</div>
+
+    		</div>
+    	</div>
+    </div>
+  	
+		<div class="row">
+	  	<button type="button" class="load-more-btn btn btn-default" ng-click="getMoreTweets()">Load More</button>
+	  </div>
+
+	</div>
+
+</body>
+</html>
