@@ -1,7 +1,7 @@
-var app = angular.module('Twitter', ['ngResource']);
+var app = angular.module('Twitter', ['ngResource', 'ngSanitize']);
 
-app.controller('TweetList', function($scope, $resource) {
-    
+app.controller('TweetList', function($scope, $resource, $sce) {
+
     var getTweets = function (paging) {
 
       var params = {
@@ -13,18 +13,35 @@ app.controller('TweetList', function($scope, $resource) {
         params.max_id = $scope.maxId;
       }
 
+      // create tweet resource
       $scope.tweets = $resource('/tweets/:action/:user', params);
 
+      // GET request using the resource
       $scope.tweets.query( { }, function (res) {
         
-        var i = 1, len = res.length;
+        var twtDate, now = new Date();
+        i = 0, len = res.length;
 
+        // change the date format with moment.js depending on how long ago it was
+        for(i; i < len; i++) {
+          twtDate = moment(new Date(res[i].created_at));
+
+          console.log(twtDate.diff(now, 'hours') < 24, twtDate.diff(now, 'hours'));
+
+          if (twtDate.diff(now, 'hours') > -24) {
+            res[i].created_at = twtDate.fromNow()
+          } else {
+            res[i].created_at = twtDate.format('MMM D, YYYY h:mm a')
+          }
+        }
+
+        // add tweets to model
         if ($scope.twitterResult && paging) {
-          for(i; i < len; i++) {
-            $scope.twitterResult.push(res[i]);
+          for(i = 1; i < len; i++) {
+            $scope.tweetsResult.push(res[i]);
           }
         } else {
-          $scope.twitterResult = res;
+          $scope.tweetsResult = res;
         }
 
         $scope.maxId = res[res.length - 1].id;

@@ -4,17 +4,52 @@ body {
   background-color: #4099FF;
 }
 
+
+
 .profile-image img {
 	width: 40px;
 	height: 40px;
 }
 
+.username-intent-link:hover {
+	text-decoration: none;
+}
+
 .tweeter-name {
+	color: #000;
 	font-weight: bold;
 }
 
-.tweeter-screenname {
+.tweeter-name:hover,
+.tweeter-screenname:hover,
+.date:hover {
+	color: #4099FF;
+}
+
+.tweeter-screenname,
+.seperator,
+.date {
 	color: #999;
+}
+
+.twt-text {
+	margin: 5px 0 5px 0;
+}
+
+.twt-intent-link {
+	margin-right: 10px;
+	color: #999;
+}
+
+.twt-intent-link:hover {
+	text-decoration: none;
+	color: #4099FF;
+}
+
+
+
+.user-search {
+	margin-bottom: 20px;
 }
 
 .load-tweets-btn {
@@ -23,8 +58,4 @@ body {
 
 .load-more-btn {
 	margin: 0 auto 0 auto;
-}
-
-.user-search {
-	margin-bottom: 20px;
 }
