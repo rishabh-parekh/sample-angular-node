@@ -4,6 +4,8 @@ app.controller('TweetList', function($scope, $resource, $sce) {
 
     var getTweets = function (paging) {
 
+      $scope.username = "TwitterDev";
+
       var params = {
         action: 'user_timeline',
         user: $scope.username
@@ -26,8 +28,6 @@ app.controller('TweetList', function($scope, $resource, $sce) {
         for(i; i < len; i++) {
           twtDate = moment(new Date(res[i].created_at));
 
-          console.log(twtDate.diff(now, 'hours') < 24, twtDate.diff(now, 'hours'));
-
           if (twtDate.diff(now, 'hours') > -24) {
             res[i].created_at = twtDate.fromNow()
           } else {
@@ -36,13 +36,14 @@ app.controller('TweetList', function($scope, $resource, $sce) {
         }
 
         // add tweets to model
-        if ($scope.twitterResult && paging) {
+        if (paging) {
           for(i = 1; i < len; i++) {
             $scope.tweetsResult.push(res[i]);
           }
         } else {
           $scope.tweetsResult = res;
         }
+
 
         $scope.maxId = res[res.length - 1].id;
       });

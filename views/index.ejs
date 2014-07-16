@@ -21,78 +21,85 @@
 	<div ng-controller="TweetList" class="container">
 
 		<div class="user-search row">
-			<div class="input-group col-lg-3">
-			  <span class="input-group-addon">@</span>
 
-				<!-- this button will trigger the getTweets function in the javascript controller -->
-			  <input type="text" class="form-control" placeholder="TwitterDev" ng-model="username">
-	      
-	      <span class="input-group-btn">
+			<div class="col-lg-3">
+				<div class="input-group">
+
+				  <span class="input-group-addon">@</span>
 
 					<!-- this button will trigger the getTweets function in the javascript controller -->
-	        <button class="btn btn-default" type="button" ng-click="getTweets()">Get Tweets</button>
+				  <input type="text" class="form-control" placeholder="TwitterDev" ng-model="username">
+		      
+		      <span class="input-group-btn">
 
-	      </span>
+						<!-- this button will trigger the getTweets function in the javascript controller -->
+		        <button class="btn btn-default" type="button" ng-click="getTweets()">Get Tweets</button>
 
+		      </span>
+
+				</div>
 			</div>
-			<div class="input-group col-lg-9">
-			</div>
+
 		</div>
 
 		<div class="row">
-	    <div class="list-group">
+			<div class="col-lg-12">
+		    <div class="list-group">
 
-	    	<!-- this div will repeat for every tweet object in the array -->
-	    	<div ng-repeat="tweet in tweetsResult" class="list-group-item">
-		    	<div class="media">
-			  		
-			  		<!-- constrcut a user follow web intent: https://dev.twitter.com/docs/intents#follow-intent -->
-			    	<a class="profile-image pull-left" href="https://twitter.com/intent/user?screen_name={{tweet.user.name}}" target="_blank">
-		    			
-		    			<!-- the user profile image -->
-		    			<img src="{{tweet.user.profile_image_url}}" />
+		    	<!-- this div will repeat for every tweet object in the array -->
+		    	<div ng-repeat="tweet in tweetsResult" class="list-group-item">
+			    	<div class="media">
+				  		
+				  		<!-- constrcut a user follow web intent: https://dev.twitter.com/docs/intents#follow-intent -->
+				    	<a class="profile-image pull-left" href="https://twitter.com/intent/user?screen_name={{tweet.user.name}}" target="_blank">
+			    			
+			    			<!-- the user profile image -->
+			    			<img src="{{tweet.user.profile_image_url}}" />
 
-			  		</a>
-			  		
-			  		<div class="media-body">
+				  		</a>
+				  		
+				  		<div class="media-body">
 
-			  			<!-- constrcut a user follow web intent: https://dev.twitter.com/docs/intents#follow-intent -->
-			  			<a class="username-intent-link" href="https://twitter.com/intent/user?screen_name={{tweet.user.name}}" target="_blank">
-			  				<span class="tweeter-name">{{tweet.user.name}}</span>
-			  				<span class="tweeter-screenname">@{{tweet.user.screen_name}}</span>
-			  			</a>
+				  			<!-- constrcut a user follow web intent: https://dev.twitter.com/docs/intents#follow-intent -->
+				  			<a class="username-intent-link" href="https://twitter.com/intent/user?screen_name={{tweet.user.name}}" target="_blank">
+				  				<span class="tweeter-name">{{tweet.user.name}}</span>
+				  				<span class="tweeter-screenname">@{{tweet.user.screen_name}}</span>
+				  			</a>
 
-			  			<span class="seperator">-</span>
+				  			<span class="seperator">-</span>
 
-		    			<!-- constrcut a permalink to the single tweet  -->
-			  			<a class="username-intent-link" href="https://twitter.com/niw/status/{{tweet.id_str}}" target="_blank">
-			  				<span class="date">{{tweet.created_at | date:'medium'}}</span>
-			  			</a><br/>
+			    			<!-- constrcut a permalink to the single tweet  -->
+				  			<a class="username-intent-link" href="https://twitter.com/niw/status/{{tweet.id_str}}" target="_blank">
+				  				<span class="date">{{tweet.created_at | date:'medium'}}</span>
+				  			</a><br/>
 
-		    			<!-- the tweet text -->
-		    			<p class="twt-text" ng-bind-html="tweet.text"></p>
+			    			<!-- the tweet text -->
+			    			<p class="twt-text" ng-bind-html="tweet.text"></p>
 
-		    			<!-- constrcut a tweet reply web intent: https://dev.twitter.com/docs/intents#tweet-intent -->
-		    			<a class="twt-intent-link" href="https://twitter.com/intent/tweet?in_reply_to={{tweet.id_str}}"><span class="glyphicon glyphicon-share-alt"></span> reply</a>
-		    			
-		    			<!-- constrcut a retweet web intent: https://dev.twitter.com/docs/intents#tweet-intent -->
-		    			<a class="twt-intent-link" href="https://twitter.com/intent/retweet?tweet_id={{tweet.id_str}}"><span class="glyphicon glyphicon-retweet"></span> retweet</a>
-		    			
-		    			<!-- constrcut a favorite web intent: https://dev.twitter.com/docs/intents#tweet-intent -->
-		    			<a class="twt-intent-link" href="https://twitter.com/intent/favorite?tweet_id={{tweet.id_str}}"><span class="glyphicon glyphicon-star"></span> favorite</a>
-		    			
-					  </div>
-		    	</div>
-    		</div>
+			    			<!-- constrcut a tweet reply web intent: https://dev.twitter.com/docs/intents#tweet-intent -->
+			    			<a class="twt-intent-link" href="https://twitter.com/intent/tweet?in_reply_to={{tweet.id_str}}"><span class="glyphicon glyphicon-share-alt"></span> reply</a>
+			    			
+			    			<!-- constrcut a retweet web intent: https://dev.twitter.com/docs/intents#tweet-intent -->
+			    			<a class="twt-intent-link" href="https://twitter.com/intent/retweet?tweet_id={{tweet.id_str}}"><span class="glyphicon glyphicon-retweet"></span> retweet</a>
+			    			
+			    			<!-- constrcut a favorite web intent: https://dev.twitter.com/docs/intents#tweet-intent -->
+			    			<a class="twt-intent-link" href="https://twitter.com/intent/favorite?tweet_id={{tweet.id_str}}"><span class="glyphicon glyphicon-star"></span> favorite</a>
+			    			
+						  </div>
+			    	</div>
+	    		</div>
 
+	    	</div>
     	</div>
     </div>
   	
 
 		<div class="row">
 
-			<!-- this button will trigger the getMoreTweets function in the javascript controller -->
-	  	<button type="button" class="load-more-btn btn btn-default" ng-click="getMoreTweets()">Load More</button>
+			<div class="col-lg-12">
+				<!-- this button will trigger the getMoreTweets function in the javascript controller -->
+		  	<button type="button" class="load-more-btn btn btn-default" ng-click="getMoreTweets()">Load More</button>
+	  	</div>
 
 	  </div>
 
