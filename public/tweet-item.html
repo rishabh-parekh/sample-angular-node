@@ -35,7 +35,7 @@
 
 			<!-- photos found in media entities -->
 			<div ng-if="tweet.photos" class="media">
-				<img class="tweet-image" ng-repeat="photo in tweet.photos" src="{{photo.url}}" style="width:{{photo.width}}px; height:{{photo.height}}px;" />
+				<a ng-repeat="photo in tweet.photos" href="{{photo.permalink}}" target="_blank"><img class="tweet-image" src="{{photo.url}}" style="width:{{photo.width}}px; height:{{photo.height}}px;" /></a>
 			</div>
 
 	  </div>

@@ -37,7 +37,7 @@ app.controller('TweetList', function($scope, $resource, $sce) {
 
             photos.push({
               url: mediaItem.media_url + ':small',
-              expanded_url: mediaItem.url,
+              permalink: mediaItem.url,
               width: IMAGE_WIDTH,
               height: Math.floor(mediaItem.sizes.small.h * scale)
             });
