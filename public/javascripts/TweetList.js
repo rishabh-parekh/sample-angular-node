@@ -43,8 +43,6 @@ app.controller('TweetList', function($scope, $resource, $sce) {
             });
           }
         });
-
-        console.log(photos);
       }
 
       return photos;
