@@ -1,0 +1,131 @@
+body {
+  padding: 50px;
+ 	background: -moz-linear-gradient(top, #999, #333);
+ 	background: -ms-linear-gradient(top, #999, #333);
+ 	background: -webkit-linear-gradient(top, #999, #333);
+  background-attachment: fixed;
+  color: #666;
+}
+
+a {
+	text-decoration: none;
+}
+
+h1 {
+	font-size: 24px;
+	margin: 0 0 15px 0;
+	line-height: 40px;
+	color: #FFF;
+	font-weight: normal;
+}
+
+#twitter-logo {
+	display: inline-block;
+	height: 44px;
+	width: auto;
+	position: relative;
+	top: -6px;
+	margin: 0 10px 0 0;
+}
+
+#search-container {
+	margin-bottom: 20px;
+}
+
+.tweet-item {
+	width: 275px;
+}
+
+.tweet-header {
+	height: 40px;
+}
+
+.user-profile-image {
+	border: 1px solid #999;
+	width: 40px;
+	height: 40px;
+	margin-right: 10px;
+	overflow: hidden;
+	float: left;
+}
+
+.user-profile-image  img {
+	width: 100%;
+	height: 100%;
+}
+
+.user-details {
+	float: left;
+}
+
+.username-intent-link:hover {
+	text-decoration: none;
+}
+
+.tweeter-name {
+	color: #333;
+	font-weight: bold;
+}
+
+.tweeter-name:hover,
+.tweeter-screenname:hover,
+.date:hover {
+	color: #4099FF;
+}
+
+.tweeter-screenname,
+.date {
+	color: #999;
+}
+
+.date {
+	font-size: 12px;
+}
+
+.media img {
+	border: 1px solid #CCC;
+}
+
+.twt-text {
+	line-height: 18px;
+}
+
+.twt-text a {
+	color: #4099FF;
+}
+
+.twt-intent-link {
+	margin-right: 10px;
+	color: #999;
+}
+
+.twt-intent-link:hover {
+	text-decoration: none;
+	color: #4099FF;
+}
+
+.twt-intent-link .glyphicon {
+	position: relative;
+	top: 2px;
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+  -ms-filter: "FlipH";
+}
+
+.user-search {
+	margin-bottom: 20px;
+}
+
+.load-tweets-btn {
+	display: inline-block;
+}
+
+.twitter-logo {
+	margin-top: 2px;
+	width: auto;
+	height: 32px;
+	float: right;
+}
