@@ -33,7 +33,7 @@ router.get('/user_timeline/:user', function(req, res) {
 
   var params = {
     screen_name: req.params.user, // the user id passed in as part of the route
-    count: 20 // how many tweets to return
+    count: 30 // how many tweets to return
   };
 
   // the max_id is passed in via a query string param:

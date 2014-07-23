@@ -2,9 +2,58 @@ var app = angular.module('Twitter', ['ngResource', 'ngSanitize']);
 
 app.controller('TweetList', function($scope, $resource, $sce) {
 
-    var getTweets = function (paging) {
+    /**
+     * change the date format with moment.js depending on how long ago it was
+     **/
+    function processTime (dateStr) {
 
-      $scope.username = "TwitterDev";
+      var twtDate = moment( new Date(dateStr) ),
+      now = new Date();
+
+      if (twtDate.diff(now, 'hours') > -24) {
+        // less than 24 hours ago - how long ago was it posted?
+        dateStr = twtDate.fromNow()
+      } else {
+        // more than 24 hours ago - just the date/time
+        dateStr = twtDate.format('MMM D, YYYY h:mm a')
+      }
+
+      return dateStr;
+    };
+
+    /**
+     * calculate image sizes so masonry can layout correctly
+     **/
+    function processPhotos (media) {
+      
+      var photos = [], IMAGE_WIDTH = 243, scale;
+
+      if( angular.isDefined(media) ) {
+        angular.forEach(media, function(mediaItem, key) {
+          if( mediaItem.type == 'photo' ) {
+
+            // the API return images sizes so we can no the image size without loading an image
+            scale = IMAGE_WIDTH / mediaItem.sizes.small.w; 
+
+            photos.push({
+              url: mediaItem.media_url + ':small',
+              expanded_url: mediaItem.url,
+              width: IMAGE_WIDTH,
+              height: Math.floor(mediaItem.sizes.small.h * scale)
+            });
+          }
+        });
+
+        console.log(photos);
+      }
+
+      return photos;
+    };
+
+    /**
+     * requests and processes tweet data
+     **/
+    function getTweets (paging) {
 
       var params = {
         action: 'user_timeline',
@@ -20,32 +69,29 @@ app.controller('TweetList', function($scope, $resource, $sce) {
 
       // GET request using the resource
       $scope.tweets.query( { }, function (res) {
-        
-        var twtDate, now = new Date();
+
+        if(!paging) {
+          $scope.tweetsResult = [];
+        }
+
+        var tweetObj,
         i = 0, len = res.length;
 
-        // change the date format with moment.js depending on how long ago it was
-        for(i; i < len; i++) {
-          twtDate = moment(new Date(res[i].created_at));
+        angular.forEach(res, function(tweet, key) {
+          tweet.created_at = processTime(tweet.created_at);
+          tweet.photos = processPhotos(tweet.entities.media);
 
-          if (twtDate.diff(now, 'hours') > -24) {
-            res[i].created_at = twtDate.fromNow()
-          } else {
-            res[i].created_at = twtDate.format('MMM D, YYYY h:mm a')
-          }
-        }
+          // add to model
+          $scope.tweetsResult.push(tweet);
+        });
 
-        // add tweets to model
-        if (paging) {
-          for(i = 1; i < len; i++) {
-            $scope.tweetsResult.push(res[i]);
-          }
-        } else {
-          $scope.tweetsResult = res;
-        }
-
-
+        // for paging
         $scope.maxId = res[res.length - 1].id;
+
+        setTimeout(function () {
+          msnry.reloadItems();
+          msnry.layout();
+        }, 75);
       });
     }
 
@@ -58,6 +104,28 @@ app.controller('TweetList', function($scope, $resource, $sce) {
       getTweets(true);
     };
 
-    getTweets();
+    // initiate masonry
+    var msnry = new Masonry('#tweet-list', {
+      columnWidth: 295,
+      itemSelector: '.tweet-item',
+      transitionDuration: 0,
+      isFitWidth: true
+    });
 
+    msnry.bindResize(function () {
+      console.log('resize');
+    });
+
+    // set a default username value
+    $scope.username = "twoffice";
+    
+    // empty tweet model
+    $scope.tweetsResult = [];
+
+    getTweets();
+})
+.directive('tweetItem', function() {
+  return {
+    templateUrl: 'tweet-item.html'
+  };
 });
