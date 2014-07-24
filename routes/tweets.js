@@ -2,24 +2,21 @@ var express = require('express');
 var router = express.Router();
 var tweetText = require('twitter-text');
 var TwitterClient = require('../lib/Twitter');
+var Twit = require('twit')
 var config = require('../config');
 
 // instantiate Twitter module
-var twitter = new TwitterClient(config.twitter);
+//var twitter = new TwitterClient(config.twitter);
+
+var twit = new Twit(config.twitter);
 
 /* GET tweets json. */
 router.get('/user_timeline/:user', function(req, res) {
 
-  // callback handlers
-  function onErr (resp) {
-  	res.setHeader('Content-Type', 'application/json');
-  	res.send(resp);
-  };
-
-  function onSuccess (resp) {
+  function onComplete (err, data, resp) {
   	res.setHeader('Content-Type', 'application/json');
 
-    var twtText, tweets = JSON.parse(resp),
+    var twtText, tweets = data,
   	i = 0, len = tweets.length;
 
     for(i; i < len; i++) {
@@ -43,8 +40,7 @@ router.get('/user_timeline/:user', function(req, res) {
   }
 
   // request data 
-  twitter.getUserTimeline(params, onErr, onSuccess);
-
+  twit.get('/statuses/user_timeline', params, onComplete);
 });
 
 module.exports = router;
