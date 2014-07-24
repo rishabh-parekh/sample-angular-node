@@ -3,8 +3,72 @@ var app = angular.module('Twitter', ['ngResource', 'ngSanitize']);
 app.controller('TweetList', function($scope, $resource, $timeout) {
 
     /**
+     * init controller and set defaults
+     */
+    function init () {
+
+      // initiate masonry
+      $scope.msnry = new Masonry('#tweet-list', {
+        columnWidth: 295,
+        itemSelector: '.tweet-item',
+        transitionDuration: 0,
+        isFitWidth: true
+      });
+
+      // set a default username value
+      $scope.username = "twitterdev";
+      
+      // empty tweet model
+      $scope.tweetsResult = [];
+
+      $scope.getTweets();
+    }
+
+    /**
+     * requests and processes tweet data
+     */
+    function getTweets (paging) {
+
+      var params = {
+        action: 'user_timeline',
+        user: $scope.username
+      };
+
+      if ($scope.maxId) {
+        params.max_id = $scope.maxId;
+      }
+
+      // create Tweet data resource
+      $scope.tweets = $resource('/tweets/:action/:user', params);
+
+      // GET request using the resource
+      $scope.tweets.query( { }, function (res) {
+
+        if( angular.isUndefined(paging) ) {
+          $scope.tweetsResult = [];
+        }
+
+        angular.forEach(res, function(tweet, key) {
+          tweet.created_at = processTime(tweet.created_at);
+          tweet.photos = processPhotos(tweet.entities.media);
+        });
+
+        $scope.tweetsResult = $scope.tweetsResult.concat(res);
+
+        // for paging - https://dev.twitter.com/docs/working-with-timelines
+        $scope.maxId = res[res.length - 1].id;
+
+        // apply masonry layout
+        $timeout(function () {
+          $scope.msnry.reloadItems();
+          $scope.msnry.layout();
+        }, 30);
+      });
+    }
+
+    /**
      * change the date format with moment.js per Twitter display requirements
-     **/
+     */
     function processTime (dateStr) {
 
       var twtDate = moment( new Date(dateStr) ),
@@ -19,11 +83,11 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
       }
 
       return dateStr;
-    };
+    }
 
     /**
      * calculates image sizes so masonry can layout correctly
-     **/
+     */
     function processPhotos (media) {
       
       var photos = [],
@@ -48,74 +112,24 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
       }
 
       return photos;
-    };
-
-    /**
-     * requests and processes tweet data
-     **/
-    function getTweets (paging) {
-
-      var params = {
-        action: 'user_timeline',
-        user: $scope.username
-      };
-
-      if ($scope.maxId) {
-        params.max_id = $scope.maxId;
-      }
-
-      // create tweet resource
-      $scope.tweets = $resource('/tweets/:action/:user', params);
-
-      // GET request using the resource
-      $scope.tweets.query( { }, function (res) {
-
-        if( angular.isUndefined(paging) ) {
-          $scope.tweetsResult = [];
-        }
-
-        angular.forEach(res, function(tweet, key) {
-          tweet.created_at = processTime(tweet.created_at);
-          tweet.photos = processPhotos(tweet.entities.media);
-        });
-
-        $scope.tweetsResult = $scope.tweetsResult.concat(res);
-
-        // for paging - https://dev.twitter.com/docs/working-with-timelines
-        $scope.maxId = res[res.length - 1].id;
-
-        // apply masonry layout
-        $timeout(function () {
-          msnry.reloadItems();
-          msnry.layout();
-        }, 30);
-      });
     }
 
+    /**
+     * binded to @user input form
+     */
     $scope.getTweets = function () {
       $scope.maxId = undefined;
       getTweets();
-    };
+    }
 
+    /**
+     * binded to 'Get More Tweets' button
+     */
     $scope.getMoreTweets = function () {
       getTweets(true);
-    };
+    }
 
-    // initiate masonry
-    var msnry = new Masonry('#tweet-list', {
-      columnWidth: 295,
-      itemSelector: '.tweet-item',
-      transitionDuration: 0,
-      isFitWidth: true
-    });
-
-    // set a default username value
-    $scope.username = "twitterdev";
-    
-    // empty tweet model
-    $scope.tweetsResult = [];
-
-    $scope.getTweets();
+    init();
 })
 .directive('tweetItem', function() {
   return {
