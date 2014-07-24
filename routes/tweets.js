@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var tweetText = require('twitter-text');
-var TwitterClient = require('../lib/Twitter');
 var Twit = require('twit')
 var config = require('../config');
 
