@@ -1,9 +1,9 @@
 var app = angular.module('Twitter', ['ngResource', 'ngSanitize']);
 
-app.controller('TweetList', function($scope, $resource, $sce) {
+app.controller('TweetList', function($scope, $resource, $timeout) {
 
     /**
-     * change the date format with moment.js depending on how long ago it was
+     * change the date format with moment.js per Twitter display requirements
      **/
     function processTime (dateStr) {
 
@@ -15,24 +15,26 @@ app.controller('TweetList', function($scope, $resource, $sce) {
         dateStr = twtDate.fromNow()
       } else {
         // more than 24 hours ago - just the date/time
-        dateStr = twtDate.format('MMM D, YYYY h:mm a')
+        dateStr = twtDate.format('MMM D, YYYY h:mm a');
       }
 
       return dateStr;
     };
 
     /**
-     * calculate image sizes so masonry can layout correctly
+     * calculates image sizes so masonry can layout correctly
      **/
     function processPhotos (media) {
       
-      var photos = [], IMAGE_WIDTH = 243, scale;
+      var photos = [],
+      IMAGE_WIDTH = 243,
+      scale;
 
       if( angular.isDefined(media) ) {
         angular.forEach(media, function(mediaItem, key) {
           if( mediaItem.type == 'photo' ) {
 
-            // the API return images sizes so we can no the image size without loading an image
+            // the API return images sizes so we can calculate proper image size without loading the image
             scale = IMAGE_WIDTH / mediaItem.sizes.small.w; 
 
             photos.push({
@@ -68,28 +70,25 @@ app.controller('TweetList', function($scope, $resource, $sce) {
       // GET request using the resource
       $scope.tweets.query( { }, function (res) {
 
-        if(!paging) {
+        if( angular.isUndefined(paging) ) {
           $scope.tweetsResult = [];
         }
-
-        var tweetObj,
-        i = 0, len = res.length;
 
         angular.forEach(res, function(tweet, key) {
           tweet.created_at = processTime(tweet.created_at);
           tweet.photos = processPhotos(tweet.entities.media);
-
-          // add to model
-          $scope.tweetsResult.push(tweet);
         });
 
-        // for paging
+        $scope.tweetsResult = $scope.tweetsResult.concat(res);
+
+        // for paging - https://dev.twitter.com/docs/working-with-timelines
         $scope.maxId = res[res.length - 1].id;
 
-        setTimeout(function () {
+        // apply masonry layout
+        $timeout(function () {
           msnry.reloadItems();
           msnry.layout();
-        }, 75);
+        }, 30);
       });
     }
 
@@ -110,17 +109,13 @@ app.controller('TweetList', function($scope, $resource, $sce) {
       isFitWidth: true
     });
 
-    msnry.bindResize(function () {
-      console.log('resize');
-    });
-
     // set a default username value
-    $scope.username = "twoffice";
+    $scope.username = "twitterdev";
     
     // empty tweet model
     $scope.tweetsResult = [];
 
-    getTweets();
+    $scope.getTweets();
 })
 .directive('tweetItem', function() {
   return {
