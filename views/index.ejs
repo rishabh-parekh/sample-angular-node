@@ -52,7 +52,17 @@
 		    	<div id="tweet-list">
 
 		    		<!-- this div will repeat for every tweet object in the array using a template-expanding directive -->
-		    		<div ng-repeat="tweet in tweetsResult" class="tweet-item" tweet-item></div>
+		    		<div ng-repeat="tweet in tweetsResult" class="tweet-item">
+
+		    			<!-- sanitized HTML binding -->
+							<div ng-bind-html="tweet.oEmbed.html"></div>
+
+							<!-- binding to Tweet source property -->
+							<div class="tweet-details">
+								Source: <span ng-bind-html="tweet.source"></span>
+							</div>
+
+		    		</div>
 
 		    	</div>
 

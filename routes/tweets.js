@@ -13,7 +13,9 @@ var MAX_WIDTH = 305;
 var OEMBED_URL = 'https://api.twitter.com/1/statuses/oembed.json';
 var USER_TIMELINE_URL = '/statuses/user_timeline';
 
-/* GET tweets json. */
+/**
+ * GET tweets json.
+ */
 router.get('/user_timeline/:user', function(req, res) {
 
   var oEmbedTweets = [], tweets = [],

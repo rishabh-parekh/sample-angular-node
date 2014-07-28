@@ -7,7 +7,13 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
      */
     function init () {
 
-      // initiate masonry
+      // set a default username value
+      $scope.username = "twitterdev";
+      
+      // empty tweet model
+      $scope.tweetsResult = [];
+
+      // initiate masonry.js
       $scope.msnry = new Masonry('#tweet-list', {
         columnWidth: 320,
         itemSelector: '.tweet-item',
@@ -15,18 +21,12 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
         isFitWidth: true
       });
 
-      // set a default username value
-      $scope.username = "twitterdev";
-      
-      // empty tweet model
-      $scope.tweetsResult = [];
-
       // layout masonry.js on widgets.js loaded event
       twttr.events.bind('loaded', function () {
         $scope.msnry.reloadItems();
         $scope.msnry.layout();
       });
-
+      
       $scope.getTweets();
     }
 
@@ -82,9 +82,4 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
     }
 
     init();
-})
-.directive('tweetItem', function() {
-  return {
-    templateUrl: 'tweet-item.html'
-  };
 });
