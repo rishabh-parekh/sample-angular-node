@@ -57,7 +57,10 @@ router.get('/user_timeline/:user', function(req, res) {
       "omit_script": true
     };
 
-    // oEmbed request
+    /**
+     * oEmbed request
+     * the response should be cached in a production env
+     */
     request.get(OEMBED_URL, { 'qs': query }, function (err, data, resp) {
     
       var data = JSON.parse(resp);
@@ -65,6 +68,7 @@ router.get('/user_timeline/:user', function(req, res) {
       tweet.oEmbed = data;
       oEmbedTweets.push(tweet);
 
+      // do we have oEmbed HTML for all Tweets?
       if (oEmbedTweets.length == tweets.length) {
         res.send(oEmbedTweets);
       }
