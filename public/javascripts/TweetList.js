@@ -26,7 +26,7 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
         $scope.msnry.reloadItems();
         $scope.msnry.layout();
       });
-      
+
       $scope.getTweets();
     }
 

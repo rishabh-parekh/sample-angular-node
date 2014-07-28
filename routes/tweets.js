@@ -8,7 +8,7 @@ var config = require('../config');
 // instantiate Twit module
 var twitter = new Twit(config.twitter);
 
-var TWEET_COUNT = 5;
+var TWEET_COUNT = 15;
 var MAX_WIDTH = 305;
 var OEMBED_URL = 'https://api.twitter.com/1/statuses/oembed.json';
 var USER_TIMELINE_URL = '/statuses/user_timeline';
