@@ -11,6 +11,7 @@
     "express": "~4.2.0",
     "oauth": "*",
     "qs": "*",
+    "request": "^2.39.0",
     "twit": "^1.1.18",
     "twitter-text": "^1.9.0"
   },
