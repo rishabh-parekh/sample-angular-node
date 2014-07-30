@@ -9,18 +9,15 @@ Installing and Running
 
 1. Install [Node.js](http://nodejs.org/)
 
-2. Clone GitHub repo:
-```
+2. Clone GitHub repo: ```
 git clone https://github.com/twitterdev/sample-angular-node.git
 ```
 
-3. Install node module dependencies:
-```
+3. Install node module dependencies: ```
 npm install 
 ```
 
-4. Run application:
-```
+4. Run application: ```
 npm start
 ```
 
