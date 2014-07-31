@@ -50,7 +50,6 @@ router.get('/user_timeline/:user', function(req, res) {
     // oEmbed request params
     var params = {
       "id": tweet.id_str,
-      "url": 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str,
       "maxwidth": MAX_WIDTH,
       "hide_thread": true,
       "omit_script": true
