@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var tweetText = require('twitter-text');
-var Twit = require('twit')
-var request = require('request');
+var Twit = require('twit');
 var config = require('../config');
 
 // instantiate Twit module
