@@ -8,8 +8,8 @@ var twitter = new Twit(config.twitter);
 
 var TWEET_COUNT = 15;
 var MAX_WIDTH = 305;
-var OEMBED_URL = '/statuses/oembed';
-var USER_TIMELINE_URL = '/statuses/user_timeline';
+var OEMBED_URL = 'statuses/oembed';
+var USER_TIMELINE_URL = 'statuses/user_timeline';
 
 /**
  * GET tweets json.
@@ -55,7 +55,6 @@ router.get('/user_timeline/:user', function(req, res) {
 
     // request data 
     twitter.get(OEMBED_URL, params, function (err, data, resp) {
-
       tweet.oEmbed = data;
       oEmbedTweets.push(tweet);
 
