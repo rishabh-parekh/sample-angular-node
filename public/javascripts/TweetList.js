@@ -31,7 +31,7 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
       twttr.events.bind(
         'rendered',
         function (event) {
-          console.log("Created widget", event.target.id);
+          //console.log("Created widget", event.target.id);
 
         }
       );
@@ -88,7 +88,10 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
 
            msg = "Tweets Result Text " + $scope.tweetsResult[i].text;
            var http_index = msg.indexOf('http');
-           msg = msg.substring(0,http_index) + "Link";
+           if (http_index > 0) {  
+             msg = msg.substring(0,http_index) + "Link";
+             //console.log ("Replaced Tweets Result Text" , msg);
+           }
 
            msg = new SpeechSynthesisUtterance(msg);
            speechSynthesis.speak(msg);
@@ -154,7 +157,11 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
 
            msg = "Tweets Result Text " + $scope.tweetsResult[i].text;
            var http_index = msg.indexOf('http');
-           msg = msg.substring(0,http_index) + "Link";
+           if (http_index > 0) {  
+             msg = msg.substring(0,http_index) + "Link";
+             //console.log ("Replaced Tweets Result Text" , msg);
+           }
+
            msg = new SpeechSynthesisUtterance(msg);
            speechSynthesis.speak(msg);
            //console.log ("Tweets Result Created At" , $scope.tweetsResult[i].created_at);
