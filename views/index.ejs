@@ -33,17 +33,33 @@
 
 				<!-- this form will trigger the getTweets function in the javascript controller on submit -->
 				<form class="input-group" ng-submit="getTweets()" >
+	  			<span class="input-group-addon">#</span>
+
+				<!-- this text input is binded to a variable in the javascript controller -->
+				 <input type="text" class="form-control" placeholder="TwitterDev" ng-model="search">
+
+				<span class="input-group-btn">
+		                   <button class="btn btn-default" type="submit">Get Search Tweets</button>
+		                </span>
+				</form>
+
+   		       </div>
+		</div>
+		<div id="search-container" class="row">
+			<div class="col-lg-3">
+
+				<!-- this form will trigger the getTweets function in the javascript controller on submit -->
+				<form class="input-group" ng-submit="getUserTweets()" >
 	  			<span class="input-group-addon">@</span>
 
-					<!-- this text input is binded to a variable in the javascript controller -->
-				  <input type="text" class="form-control" placeholder="TwitterDev" ng-model="username">
+				<!-- this text input is binded to a variable in the javascript controller -->
+				 <input type="text" class="form-control" placeholder="TwitterDev" ng-model="username">
 
-					<span class="input-group-btn">
-		        <button class="btn btn-default" type="submit">Get Tweets</button>
-		      </span>
-
+				<span class="input-group-btn">
+		                   <button class="btn btn-default" type="submit">Get User Tweets</button>
+		                </span>
 				</form>
-   		</div>
+   		       </div>
 		</div>
 
 		<div class="row clearfix">

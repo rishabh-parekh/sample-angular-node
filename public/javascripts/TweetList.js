@@ -8,7 +8,8 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
     function init () {
 
       // set a default username value
-      $scope.username = "twitterdev";
+      $scope.username = "Weather";
+      $scope.search = "snow";
       
       // empty tweet model
       $scope.tweetsResult = [];
@@ -27,7 +28,15 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
         $scope.msnry.layout();
       });
 
-      $scope.getTweets();
+      twttr.events.bind(
+        'rendered',
+        function (event) {
+          console.log("Created widget", event.target.id);
+
+        }
+      );
+
+      // $scope.getTweets();
     }
 
     /**
@@ -37,7 +46,7 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
 
       var params = {
         action: 'user_timeline',
-        user: $scope.username
+        user: $scope.search
       };
 
       if ($scope.maxId) {
@@ -63,6 +72,99 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
         $timeout(function () {
           twttr.widgets.load();
         }, 30);
+
+        //console.log ("Tweets Result Length" , $scope.tweetsResult.length);
+        for (i=0; i < $scope.tweetsResult.length; i++) { 
+           var msg = "Tweets Result Created At " +  $scope.tweetsResult[i].created_at;
+           var second_index = msg.indexOf('+');
+           msg = msg.substring(0,second_index);
+
+           msg = new SpeechSynthesisUtterance(msg);
+           speechSynthesis.speak(msg);
+
+           msg = "Tweets Result Created By " + $scope.tweetsResult[i].user.name;
+           msg = new SpeechSynthesisUtterance(msg);
+           speechSynthesis.speak(msg);
+
+           msg = "Tweets Result Text " + $scope.tweetsResult[i].text;
+           var http_index = msg.indexOf('http');
+           msg = msg.substring(0,http_index) + "Link";
+
+           msg = new SpeechSynthesisUtterance(msg);
+           speechSynthesis.speak(msg);
+           //console.log ("Tweets Result Created At" , $scope.tweetsResult[i].created_at);
+           //console.log ("Tweets Result Created By" , $scope.tweetsResult[i].user.name);
+           //console.log ("Tweets Result Text" , $scope.tweetsResult[i].text);
+
+        }
+
+
+
+      });
+    }
+
+
+
+    /**
+     * requests and processes tweet data
+     */
+    function getUserTweets (paging) {
+
+      var params = {
+        action: 'user_timeline',
+        user: $scope.username
+      };
+
+      if ($scope.maxId) {
+        params.max_id = $scope.maxId;
+      }
+
+      // create Tweet data resource
+      $scope.tweets = $resource('/user_tweets/:action/:user', params);
+
+      // GET request using the resource
+      $scope.tweets.query( { }, function (res) {
+
+        if( angular.isUndefined(paging) ) {
+          $scope.tweetsResult = [];
+        }
+
+        $scope.tweetsResult = $scope.tweetsResult.concat(res);
+
+        // for paging - https://dev.twitter.com/docs/working-with-timelines
+        $scope.maxId = res[res.length - 1].id;
+
+        // render tweets with widgets.js
+        $timeout(function () {
+          twttr.widgets.load();
+        }, 30);
+
+        //console.log ("Tweets Result Length" , $scope.tweetsResult.length);
+        for (i=0; i < $scope.tweetsResult.length; i++) { 
+        
+           var msg = "Tweets Result Created At " +  $scope.tweetsResult[i].created_at;
+           var second_index = msg.indexOf('+');
+           msg = msg.substring(0,second_index);
+           msg = new SpeechSynthesisUtterance(msg);
+           speechSynthesis.speak(msg);
+
+           msg = "Tweets Result Created By " + $scope.tweetsResult[i].user.name;
+           msg = new SpeechSynthesisUtterance(msg);
+           speechSynthesis.speak(msg);
+
+           msg = "Tweets Result Text " + $scope.tweetsResult[i].text;
+           var http_index = msg.indexOf('http');
+           msg = msg.substring(0,http_index) + "Link";
+           msg = new SpeechSynthesisUtterance(msg);
+           speechSynthesis.speak(msg);
+           //console.log ("Tweets Result Created At" , $scope.tweetsResult[i].created_at);
+           //console.log ("Tweets Result Created By" , $scope.tweetsResult[i].user.name);
+           //console.log ("Tweets Result Text" , $scope.tweetsResult[i].text);
+
+        }
+
+
+
       });
     }
 
@@ -71,15 +173,30 @@ app.controller('TweetList', function($scope, $resource, $timeout) {
      */
     $scope.getTweets = function () {
       $scope.maxId = undefined;
+      $scope.tweet_type = 'search';
       getTweets();
-    }
+    };
+
+    /**
+     * binded to @user input form
+     */
+    $scope.getUserTweets = function () {
+      $scope.maxId = undefined;
+      $scope.tweet_type = 'user';
+      getUserTweets();
+    };
 
     /**
      * binded to 'Get More Tweets' button
      */
     $scope.getMoreTweets = function () {
-      getTweets(true);
-    }
+      if ($scope.tweet_type == 'user') {
+        getUserTweets(true);
+      }
+      else {
+        getTweets(true);
+      }
+    };
 
     init();
 });
