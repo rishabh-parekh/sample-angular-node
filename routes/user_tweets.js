@@ -10,10 +10,7 @@ var TWEET_COUNT = 5;
 var MAX_WIDTH = 305;
 var OEMBED_URL = 'statuses/oembed';
 var USER_TIMELINE_URL = 'statuses/user_timeline';
-//var RETWEETS_OF_ME_URL = 'statuses/retweets_of_me';
-//var HOME_TIMELINE_URL = 'statuses/home_timeline';
-
-var TWITTER_URL = 'search/tweets';
+var TWITTER_URL = USER_TIMELINE_URL;
 
 /**
  * GET tweets json.
@@ -24,10 +21,7 @@ router.get('/user_timeline/:user', function(req, res) {
 
   params = {
     // If using User Time line
-    //screen_name: req.params.user, // the user id passed in as part of the route
-
-    // If using Search Query
-    q: req.params.user, // the user id passed in as part of the route
+    screen_name: req.params.user, // the user id passed in as part of the route
     count: TWEET_COUNT // how many tweets to return
   };
 
@@ -39,11 +33,8 @@ router.get('/user_timeline/:user', function(req, res) {
   // request data 
   twitter.get(TWITTER_URL, params, function (err, data, resp) {
 
-    // IF the Query is Search 
-    tweets = data.statuses;
-
     // IF the Query is Timeline 
-    //tweets = data;
+    tweets = data;
 
     var i = 0, len = tweets.length;
 
